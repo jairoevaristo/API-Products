@@ -21,6 +21,22 @@ class ProductController {
 
     return res.status(200).json({ data: products });
   }
+
+  async update(req: Request, res: Response) {
+    const { name_product, price, description } = req.body;
+    const { id } = req.params;
+
+    const repository = getRepository(Product);
+
+   const products = await repository.createQueryBuilder()
+    .update(Product)
+    .set({ name_product, price,  description })
+    .where({ id })
+    .execute();
+    
+    return res.status(200).send(products);
+  }
+  
 }
 
 export default new ProductController();
