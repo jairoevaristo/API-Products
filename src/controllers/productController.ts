@@ -13,6 +13,14 @@ class ProductController {
 
     return res.status(201).send(product);
   }
+
+  async index(req: Request, res: Response) {
+    const repository = getRepository(Product);
+
+    const products = await repository.find();
+
+    return res.status(200).json({ data: products });
+  }
 }
 
 export default new ProductController();
