@@ -36,6 +36,19 @@ class ProductController {
     
     return res.status(200).send(products);
   }
+
+  async remove(req: Request, res: Response) {
+    const { id } = req.params;
+    const repository = getRepository(Product);
+
+    const products = await repository.createQueryBuilder()
+    .delete()
+    .from(Product)
+    .where({ id })
+    .execute();
+
+    return res.status(200).send(products);
+  }
   
 }
 
