@@ -2,6 +2,13 @@ import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 
 import Product from '../models/Product';
+import User from '../models/User';
+
+interface UserDetails {
+  id: number;
+  email: string;
+  password: string;
+}
 
 class ProductController {
   async store(req: Request, res: Response) {
@@ -16,10 +23,14 @@ class ProductController {
 
   async index(req: Request, res: Response) {
     const repository = getRepository(Product);
+    const repositoryUser = getRepository(User);
 
     const products = await repository.find();
+    const user = await repositoryUser.findOne(req.userId);
 
-    return res.status(200).json({ data: products });
+    const { email } = user as UserDetails;
+
+    return res.status(200).json({ data: products, userAcitve: email });
   }
 
   async update(req: Request, res: Response) {
